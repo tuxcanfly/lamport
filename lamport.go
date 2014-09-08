@@ -70,10 +70,12 @@ func main() {
 
 	processes := [3]*Process{p1, p2, p3}
 	for {
-		a := processes[rand.Int()%len(processes)]
-		b := processes[rand.Int()%len(processes)]
-		a.send(b, "hi")
-		log.Printf("%v[%v], %v[%v], %v[%v]", p1, p1.time, p2, p2.time, p3, p3.time)
-		time.Sleep(1 * time.Second)
+		time.Sleep(time.Second)
+		go func() {
+			a := processes[rand.Int()%len(processes)]
+			b := processes[rand.Int()%len(processes)]
+			a.send(b, "hi")
+			log.Printf("%v[%v], %v[%v], %v[%v]", p1, p1.time, p2, p2.time, p3, p3.time)
+		}()
 	}
 }
