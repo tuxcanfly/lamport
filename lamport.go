@@ -62,7 +62,6 @@ func (p *Process) receive() {
 			p.Step()
 			e.time = p.time
 			log.Printf("%v: %v => %v: %v", e.time, e.from, e.to, e.message)
-		default:
 		}
 	}
 }
