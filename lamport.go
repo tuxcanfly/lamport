@@ -30,21 +30,24 @@ func (p *Process) String() string {
 
 // step increments the logical timestamp of the process
 // using an atomic counter to ensure thread safety
-func (p *Process) step() {
+func (p *Process) Step() {
 	atomic.AddUint32(&p.time, 1)
 }
 
 // send a message to the given process
-func (p *Process) send(to *Process, message string) {
-	p.step()
-	e := &Event{
-		from:    p,
-		to:      to,
-		message: message,
-		time:    p.time,
+func (p *Process) Send(to *Process, message string) {
+	p.Step()
+	// skip if step is internal i.e. both to and from
+	// are the same processes
+	if p.name != to.name {
+		e := &Event{
+			from:    p,
+			to:      to,
+			message: message,
+			time:    p.time,
+		}
+		to.events <- e
 	}
-	to.events <- e
-	log.Printf("SEND: %v => %v: %v", e.from, e.to, e.message)
 }
 
 // receive listens to messages sent to this process
@@ -56,8 +59,9 @@ func (p *Process) receive() {
 			if p.time < e.time {
 				p.time = e.time
 			}
-			p.step()
+			p.Step()
 			e.time = p.time
+			log.Printf("%v: %v => %v: %v", e.time, e.from, e.to, e.message)
 		default:
 		}
 	}
@@ -74,6 +78,10 @@ func NewProcess(name string) *Process {
 	return p
 }
 
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
 func main() {
 
 	// create three processes
@@ -88,8 +96,7 @@ func main() {
 			// pick 2 at random and send a message
 			a := processes[rand.Int()%len(processes)]
 			b := processes[rand.Int()%len(processes)]
-			a.send(b, "hi")
-			log.Printf("%v[%v], %v[%v], %v[%v]", p1, p1.time, p2, p2.time, p3, p3.time)
+			a.Send(b, "hi")
 		}()
 	}
 }

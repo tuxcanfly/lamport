@@ -8,4 +8,12 @@ Randomly sends messages between processes and records the lamport timestamp
 Usage:
 ======
 
-go run lamport.go
+Requires go compiler
+
+Build:
+
+    make
+
+Run:
+
+    ./lamport
