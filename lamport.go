@@ -28,13 +28,13 @@ func (p *Process) String() string {
 	return p.name
 }
 
-// step increments the logical timestamp of the process
+// Step increments the logical timestamp of the process
 // using an atomic counter to ensure thread safety
 func (p *Process) Step() {
 	atomic.AddUint32(&p.time, 1)
 }
 
-// send a message to the given process
+// Send a message to the given process
 func (p *Process) Send(to *Process, message string) {
 	p.Step()
 	// skip if step is internal i.e. both to and from
