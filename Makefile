@@ -4,4 +4,6 @@ lamport: lamport.go
 clean:
 	rm -rf lamport
 
-.PHONY: clean
+all: lamport
+
+.PHONY: all clean

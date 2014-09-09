@@ -92,11 +92,9 @@ func main() {
 	processes := [3]*Process{p1, p2, p3}
 	for {
 		time.Sleep(time.Second)
-		go func() {
-			// pick 2 at random and send a message
-			a := processes[rand.Int()%len(processes)]
-			b := processes[rand.Int()%len(processes)]
-			a.Send(b, "hi")
-		}()
+		// pick 2 at random and send a message
+		a := processes[rand.Int()%len(processes)]
+		b := processes[rand.Int()%len(processes)]
+		a.Send(b, "hi")
 	}
 }
