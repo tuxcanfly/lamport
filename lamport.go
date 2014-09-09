@@ -36,6 +36,7 @@ func (p *Process) Step() {
 
 // Send a message to the given process
 func (p *Process) Send(to *Process, message string) {
+	// increment local timestamp
 	p.Step()
 	// skip if step is internal i.e. both to and from
 	// are the same processes
@@ -56,10 +57,14 @@ func (p *Process) receive() {
 	for {
 		select {
 		case e := <-p.events:
-			if p.time < e.time {
+			// set maximum of local and event timestamps to be
+			// the current timestamp
+			if e.time > p.time {
 				p.time = e.time
 			}
+			// increment local timestamp
 			p.Step()
+			// set event timestamp to the updated local timestamp
 			e.time = p.time
 			log.Printf("%v: %v => %v: %v", e.time, e.from, e.to, e.message)
 		}

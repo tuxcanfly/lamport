@@ -1,9 +1,10 @@
-Lamport's Logical Clocks
-========================
+Lamport
+=======
 
-Example of Lamport's Logical Clock
+Example of [Lamport's Logical Clock](http://en.wikipedia.org/wiki/Lamport_timestamps)
 
-Randomly sends messages between processes and records the lamport timestamp
+Simulates three nodes in a distributed system and sends random messages between each
+other and logs the lamport timestamp of the events
 
 Usage:
 ======
